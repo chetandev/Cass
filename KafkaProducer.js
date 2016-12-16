@@ -2,7 +2,7 @@ var Promise = require('bluebird');
 var kafka = require('kafka-node'),
     Producer = kafka.Producer,
     KeyedMessage = kafka.KeyedMessage,
-    client = new kafka.Client(),
+    client = new kafka.Client('localhost:2181'),
     producer = new Producer(client);
 
 producer.on('ready', function() {
@@ -19,10 +19,11 @@ producer.on('error', function(err) {
 function send_to_kafka(data) {
 
     return new Promise(function(resolve, reject) {
-        var km = new KeyedMessage('key', 'message');
-        console.log('data: '+JSON.stringify([data,km]))
+        //var km = new KeyedMessage('key', 'message');
+        console.log('data: '+JSON.stringify(data))
+
         payloads = [
-            { topic: 'textmessages', messages: [data, km] }
+            { topic: 'textmessages', messages:JSON.stringify(data),partition: 0 }
         ];
         producer.send(payloads, function(err, data) {
             console.log(data);

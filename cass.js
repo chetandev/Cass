@@ -1,30 +1,24 @@
 var cassandra = require('cassandra-driver');
 var Promise = require('bluebird');
-var client = new cassandra.Client({ contactPoints: ['127.0.0.1'], keyspace: 'vehical_tracker' });
+var client = new cassandra.Client({ contactPoints: ['127.0.0.1'], keyspace: 'messagemicroservice' });
 
-function put_in_cass() {
+function put_in_cass(data) {
 
     return new Promise(function(resolve, reject) {
-        const queries = [{
-            query: 'INSERT INTO activity (home_id,datetime,code_used,event) VALUES (?,?,?,?)',
-            params: ['H01474778', new Date(), '5674', 'alarm']
-        }, {
-            query: 'INSERT INTO activity (home_id,datetime,code_used,event) VALUES (?,?,?,?)',
-            params: ['H01474779', new Date(), '5675', 'alarm']
-        }, {
-            query: 'INSERT INTO activity (home_id,datetime,code_used,event) VALUES (?,?,?,?)',
-            params: ['H01474780', new Date(), '5676', 'alarm']
-        }, {
-            query: 'INSERT INTO activity (home_id,datetime,code_used,event) VALUES (?,?,?,?)',
-            params: ['H01474781', new Date(), '5677', 'alarm']
-        }];
-        client.batch(queries, { prepare: true }, function(err,result) {
-            if(err)
-            	reject(err);
-            else
-            	resolve(result);
-            
-        });
+
+        const query = 'INSERT INTO textmessages (id,userid,address,msgbody,msgdate,msgid,msgtype) VALUES (?,?,?,?,?,?,?)';
+        for (var i = 0; i < data.length; i++) { //loop to be improved later
+
+            var params = [cassandra.types.Uuid.random(),'1234', data[i].address, data[i].body, data[i].date, data[i]._id, data[i].type]
+            client.execute(query, params, { prepare: true }, function(err, result) {
+                if (err)
+                    reject(err);
+                else
+                    resolve(result);
+
+            });
+        }
+
     })
 
 }
