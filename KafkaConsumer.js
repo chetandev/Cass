@@ -2,7 +2,7 @@ var Promise = require('bluebird');
 var cassBl = require(__base + '/cass.js');
 var kafka = require('kafka-node'),
     Consumer = kafka.Consumer,
-    client = new kafka.Client('localhost:2181'),
+    client = new kafka.Client('172.24.36:2181,172.24.1.189:2181'),
     consumer = new Consumer(
         client, [
             { topic: 'textmessages' }

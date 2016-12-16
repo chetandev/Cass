@@ -1,6 +1,6 @@
 var cassandra = require('cassandra-driver');
 var Promise = require('bluebird');
-var client = new cassandra.Client({ contactPoints: ['127.0.0.1'], keyspace: 'messagemicroservice' });
+var client = new cassandra.Client({ contactPoints: ['172.24.1.64','172.24.1.187'], keyspace: 'messagemicroservice' });
 
 function put_in_cass(data) {
 

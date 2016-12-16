@@ -2,7 +2,7 @@ var Promise = require('bluebird');
 var kafka = require('kafka-node'),
     Producer = kafka.Producer,
     KeyedMessage = kafka.KeyedMessage,
-    client = new kafka.Client('localhost:2181'),
+    client = new kafka.Client('172.24.36:2181,172.24.1.189:2181'),
     producer = new Producer(client);
 
 producer.on('ready', function() {
