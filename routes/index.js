@@ -58,7 +58,7 @@ router.post('/kafka/send/', function(req, res) {
     
     return new Promise(function(resolve, reject) {
         //console.log(req.body)
-        kafkaBl.send_to_kafka_by_partition(req.body)
+        kafkaBl.send_to_kafka(req.body)
             .then(function(result) {
                 res.json(result);
             })
