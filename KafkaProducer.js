@@ -23,7 +23,7 @@ function send_to_kafka(data) {
         console.log('data: '+JSON.stringify(data))
 
         payloads = [
-            { topic: 'textmessages', messages:JSON.stringify(data) }
+            { topic: 'textmessages', messages:JSON.stringify(data),partition: 1 }
         ];
         producer.send(payloads, function(err, data) {
             console.log(data);
