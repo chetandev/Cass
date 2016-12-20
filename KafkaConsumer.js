@@ -13,7 +13,7 @@ var kafka = require('kafka-node'),
 consumer.on('message', function(message) {
     console.log('msg arrived ' + message.value);
     //put data in cassandra 
-    cassBl.put_in_cass(JSON.parse(message.value))
+    cassBl.put_in_cass(JSON.parse(message.value).messages)
         .then(function(result) {
 
             console.log(result);
