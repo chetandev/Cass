@@ -27,7 +27,7 @@ function put_in_cass(data) {
 
 function get_from_cass() {
     return new Promise(function(resolve, reject) {
-        client.execute("SELECT * from activity", function(err, result) {
+        client.execute("SELECT * from textmessages", function(err, result) {
             if (!err) {
                 if (result.rows.length > 0) {
                     var user = result.rows[0];
