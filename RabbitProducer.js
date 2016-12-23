@@ -6,7 +6,9 @@ var ex = 'textmessagesexchange';
 var key = 'textmessagekey';
 
 amqp.connect('amqp://172.24.1.36', function(err, conn) {
+    if (err) { console.log(err) }
     conn.createChannel(function(err, ch) {
+        if (err) console.log(err);
         channel = ch;
         channel.assertExchange(ex, 'direct', { durable: true });
         channel.assertQueue(q, { durable: true });
