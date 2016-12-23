@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "amqplib": "^0.5.1",
     "bluebird": "^3.4.6",
     "body-parser": "~1.15.2",
     "cassandra-driver": "^3.1.6",

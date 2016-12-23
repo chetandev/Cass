@@ -1,7 +1,7 @@
 var amqp = require('amqplib/callback_api');
 var cassBl = require(__base + '/cass.js');
 
-amqp.connect('amqp://localhost', function(err, conn) {
+amqp.connect('amqp://172.24.1.189', function(err, conn) {
     conn.createChannel(function(err, ch) {
         var q = 'textmessages';
         ch.assertQueue(q, { durable: true });
