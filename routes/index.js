@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var cassBl = require(__base + '/cass.js');
 var kafkaBl = require(__base + '/KafkaProducer.js');
-var consumer = require(__base + '/KafkaConsumer.js');
+var rabbitBl = require(__base + '/RabbitProducer.js');
 /* GET home page. */
 router.get('/', function(req, res) {
     res.render('index', { title: 'Express' });
@@ -37,25 +37,9 @@ router.get('/cass/read/', function(req, res) {
 });
 
 
-// router.post('/kafka/send/part/:part', function(req, res) {
-    
-//     return new Promise(function(resolve, reject) {
-//         var partition = req.params.part;
-//         //console.log(req.body)
-//         kafkaBl.send_to_kafka_by_partition(req.body,partition)
-//             .then(function(result) {
-//                 res.json(result);
-//             })
-//             .catch(function(err) {
-//                 console.log(err)
-//                 res.status(400).send(err);
-//             })
-//     });
-// });
-
 
 router.post('/kafka/send/', function(req, res) {
-    
+
     return new Promise(function(resolve, reject) {
         //console.log(req.body)
         kafkaBl.send_to_kafka(req.body)
@@ -68,6 +52,23 @@ router.post('/kafka/send/', function(req, res) {
             })
     });
 });
+
+
+router.post('/rabbit/send/', function(req, res) {
+
+    return new Promise(function(resolve, reject) {
+        //console.log(req.body)
+        rabbitBl.send_to_rabbitmq(req.body)
+            .then(function(result) {
+                res.json(result);
+            })
+            .catch(function(err) {
+                console.log(err)
+                res.status(400).send(err);
+            })
+    });
+});
+
 
 
 module.exports = router;
