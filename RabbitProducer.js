@@ -5,7 +5,7 @@ var q = 'textmessages';
 var ex = 'textmessagesexchange';
 var key = 'textmessagekey';
 
-amqp.connect('amqp://172.24.1.36', function(err, conn) {
+amqp.connect('amqp://test:test@172.24.1.36', function(err, conn) {
     if (err) { console.log(err) }
     conn.createChannel(function(err, ch) {
         if (err) console.log(err);
