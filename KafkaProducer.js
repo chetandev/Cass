@@ -37,7 +37,6 @@ producer.on('error', function(err) {
 function send_to_kafka(data) {
 
     return new Promise(function(resolve, reject) {
-        //var km = new KeyedMessage('key', 'message');
         console.log('data: ' + JSON.stringify(data))
 
         payloads = [
