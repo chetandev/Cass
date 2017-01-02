@@ -20,9 +20,9 @@ amqp.connect('amqp://test:test@172.24.1.36', function(err, conn) {
 
 function send_to_rabbitmq(data) {
     return new Promise(function(resolve, reject) {
-        //console.log(JSON.stringify(data));
-        channel.publish(ex, key, new Buffer(JSON.stringify(data)));
-
+        setTimeout(function() {
+            channel.publish(ex, key, new Buffer(JSON.stringify(data)));
+        }, 0)
         resolve('message published');
     });
 }
