@@ -9,6 +9,7 @@ var cpuCount = require('os').cpus().length;
 var app = require('../app');
 var debug = require('debug')('cass:server');
 var http = require('http');
+http.globalAgent.maxSockets = Infinity;
 
 /**
  * Get port from environment and store in Express.
