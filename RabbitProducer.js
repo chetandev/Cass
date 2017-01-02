@@ -20,10 +20,10 @@ amqp.connect('amqp://test:test@172.24.1.36', function(err, conn) {
 function send_to_rabbitmq(data) {
 
     return new Promise(function(resolve, reject) {
-        console.log(JSON.stringify(data));
+        //console.log(JSON.stringify(data));
         channel.publish(ex, key, new Buffer(JSON.stringify(data)), { persistent: true });
         resolve('message published');
-        console.log(" [x] Sent 'Hello World!'");
+        //console.log(" [x] Sent 'Hello World!'");
     })
 }
 
