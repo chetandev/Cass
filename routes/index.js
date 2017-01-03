@@ -60,7 +60,7 @@ router.post('/rabbit/send/', function(req, res) {
         //console.log(req.body)
         rabbitBl.send_to_rabbitmq(req.body)
             .then(function(result) {
-                res.json(result);
+                res.send(result);
             })
             .catch(function(err) {
                 console.log(err)
