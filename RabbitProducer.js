@@ -22,7 +22,7 @@ function send_to_rabbitmq(data) {
     return new Promise(function(resolve, reject) {
 
         setTimeout(function() {
-            channel.publish(ex, key, new Buffer(JSON.stringify(data)), { persistent: true });
+            channel.publish(ex, key, new Buffer(JSON.stringify(data)));
         }, 0)
         resolve('message published');
     });
