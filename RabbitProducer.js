@@ -1,6 +1,5 @@
 var Promise = require('bluebird');
 var amqp = require('amqplib/callback_api');
-var safejson = require('safejson');
 var channel;
 var q = 'textmessages';
 var ex = 'textmessagesexchange';
@@ -22,7 +21,7 @@ function send_to_rabbitmq(data) {
     return new Promise(function(resolve, reject) {
         resolve('message published');
         setTimeout(function() {
-            channel.publish(ex, key, new Buffer(JSON.stringify(data)));
+            channel.publish(ex, key, new Buffer(''), { persistent: true });
         }, 0)
 
     });
