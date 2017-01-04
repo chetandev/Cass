@@ -1,6 +1,7 @@
 var Promise = require('bluebird');
 var amqp = require('amqplib/callback_api');
 var asyncJSON = require('async-json');
+var Promise = require('bluebird');
 var channel;
 var q = 'textmessages';
 var ex = 'textmessagesexchange';
