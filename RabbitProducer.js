@@ -24,6 +24,7 @@ function send_to_rabbitmq(data) {
             channel.publish(ex, key, Buffer.concat(data));
         }, 0)
         resolve('message published');
+
     });
 
 }
