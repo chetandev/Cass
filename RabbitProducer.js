@@ -1,6 +1,6 @@
 var Promise = require('bluebird');
 var amqp = require('amqplib/callback_api');
-var safejson = require('safejson');
+var asyncJSON = require('async-json');
 var channel;
 var q = 'textmessages';
 var ex = 'textmessagesexchange';
@@ -20,9 +20,14 @@ amqp.connect('amqp://test:test@172.24.1.36', function(err, conn) {
 
 function send_to_rabbitmq(data) {
     return new Promise(function(resolve, reject) {
-        setTimeout(function() {
-            channel.publish(ex, key, new Buffer(JSON.stringify(data)));
-        }, 0)
+
+        asyncJSON.stringify(data)
+            .then(function(jsonValue) {
+                channel.publish(ex, key, new Buffer(jsonValue));
+            });
+        // setTimeout(function() {
+        //     channel.publish(ex, key, new Buffer(JSON.stringify(data)));
+        // }, 0)
         resolve('message published');
     });
 }
