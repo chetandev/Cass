@@ -15,7 +15,7 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-posix.setrlimit('nofile', { soft: 100000, hard: 1000000 });
+posix.setrlimit('nofile', { soft: 50000, hard: 1000000 });
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //app.use(logger('dev'));
