@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var Promise = require('bluebird');
 var cassBl = require(__base + '/cass.js');
 var kafkaBl = require(__base + '/KafkaProducer.js');
 var rabbitBl = require(__base + '/RabbitProducer.js');
@@ -58,21 +59,15 @@ router.post('/rabbit/send/', function(req, res) {
     var data = "";
     req.on('data', function(chunk) { data += chunk })
     req.on('end', function() {
-        req.rawBody = data;
-        console.log(data)
-    })
-
-    // return new Promise(function(resolve, reject) {
-    //     //console.log(req.body)
-    //     rabbitBl.send_to_rabbitmq(req.body)
-    //         .then(function(result) {
-    //             res.send(result);
-    //         })
-    //         .catch(function(err) {
-    //             console.log(err)
-    //             res.status(400).send(err);
-    //         })
-    // });
+            return rabbitBl.send_to_rabbitmq(data);
+        })
+        .then(function(result) {
+            res.send(result);
+        })
+        .catch(function(err) {
+            console.log(err)
+            res.status(400).send(err);
+        })
 });
 
 
