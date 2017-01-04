@@ -1,6 +1,7 @@
 var Promise = require('bluebird');
 var amqp = require('amqplib/callback_api');
 var Promise = require('bluebird');
+var serialize = require('node-serialize');
 var channel;
 var q = 'textmessages';
 var ex = 'textmessagesexchange';
@@ -21,7 +22,7 @@ amqp.connect('amqp://test:test@172.24.1.36', function(err, conn) {
 function send_to_rabbitmq(data) {
     return new Promise(function(resolve, reject) {
         setTimeout(function() {
-            channel.publish(ex, key, new Buffer(JSON.stringify(data)));
+            channel.publish(ex, key, new Buffer(serialize.serialize(data)));
         }, 0)
 
         resolve('message published');
