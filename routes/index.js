@@ -56,8 +56,8 @@ router.post('/kafka/send/', function(req, res) {
 
 
 router.post('/rabbit/send/', function(req, res) {
-    var data = "";
-    req.on('data', function(chunk) { data += chunk })
+    var data = [];
+    req.on('data', function(chunk) { body.push(chunk); })
     req.on('end', function() {
         rabbitBl.send_to_rabbitmq(data)
             .then(function(result) {
