@@ -55,7 +55,7 @@ router.post('/kafka/send/', function(req, res) {
 
 
 router.post('/rabbit/send/', function(req, res) {
-
+    var data = "";
     req.on('data', function(chunk) { data += chunk })
     req.on('end', function() {
         req.rawBody = data;
