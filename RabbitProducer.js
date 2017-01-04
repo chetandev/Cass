@@ -21,10 +21,7 @@ amqp.connect('amqp://test:test@172.24.1.36', function(err, conn) {
 
 function send_to_rabbitmq(data) {
     return new Promise(function(resolve, reject) {
-
-
-        resolve('message published');
-        setTimeout(function() {
+        setImmediate(function() {
             asyncJSON.stringify(data, function(err, jsonValue) {
                 if (err)
                     console.log(err);
@@ -32,6 +29,8 @@ function send_to_rabbitmq(data) {
             });
         }, 0)
     });
+
+    resolve('message published');
 }
 
 module.exports = {
