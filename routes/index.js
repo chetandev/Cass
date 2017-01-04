@@ -59,7 +59,6 @@ router.post('/rabbit/send/', function(req, res) {
     var data = "";
     req.on('data', function(chunk) { data += chunk })
     req.on('end', function() {
-            console.log(data);
             return rabbitBl.send_to_rabbitmq(data);
         })
         .then(function(result) {
