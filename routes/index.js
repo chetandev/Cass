@@ -59,15 +59,16 @@ router.post('/rabbit/send/', function(req, res) {
     var data = "";
     req.on('data', function(chunk) { data += chunk })
     req.on('end', function() {
-            return rabbitBl.send_to_rabbitmq(data);
-        })
-        .then(function(result) {
-            res.send(result);
-        })
-        .catch(function(err) {
-            console.log(err)
-            res.status(400).send(err);
-        })
+        rabbitBl.send_to_rabbitmq(data)
+            .then(function(result) {
+                res.send(result);
+            })
+            .catch(function(err) {
+                console.log(err)
+                res.status(400).send(err);
+            })
+    })
+
 });
 
 
