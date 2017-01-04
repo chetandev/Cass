@@ -22,14 +22,15 @@ amqp.connect('amqp://test:test@172.24.1.36', function(err, conn) {
 function send_to_rabbitmq(data) {
     return new Promise(function(resolve, reject) {
 
-        asyncJSON.stringify(data)
-            .then(function(jsonValue) {
-                channel.publish(ex, key, new Buffer(jsonValue));
-            });
+        asyncJSON.stringify(data, function(err, jsonValue) {
+            if (err)
+                console.log(err);
+            channel.publish(ex, key, new Buffer(jsonValue));
+        });
+        resolve('message published');
         // setTimeout(function() {
         //     channel.publish(ex, key, new Buffer(JSON.stringify(data)));
         // }, 0)
-        resolve('message published');
     });
 }
 
