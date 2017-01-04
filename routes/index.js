@@ -56,17 +56,23 @@ router.post('/kafka/send/', function(req, res) {
 
 router.post('/rabbit/send/', function(req, res) {
 
-    return new Promise(function(resolve, reject) {
-        //console.log(req.body)
-        rabbitBl.send_to_rabbitmq(req.body)
-            .then(function(result) {
-                res.send(result);
-            })
-            .catch(function(err) {
-                console.log(err)
-                res.status(400).send(err);
-            })
-    });
+    req.on('data', function(chunk) { data += chunk })
+    req.on('end', function() {
+        req.rawBody = data;
+        console.log(data)
+    })
+
+    // return new Promise(function(resolve, reject) {
+    //     //console.log(req.body)
+    //     rabbitBl.send_to_rabbitmq(req.body)
+    //         .then(function(result) {
+    //             res.send(result);
+    //         })
+    //         .catch(function(err) {
+    //             console.log(err)
+    //             res.status(400).send(err);
+    //         })
+    // });
 });
 
 
