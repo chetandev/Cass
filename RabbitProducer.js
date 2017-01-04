@@ -23,8 +23,10 @@ function send_to_rabbitmq(data) {
         setTimeout(function() {
             channel.publish(ex, key, new Buffer(JSON.stringify(data)));
         }, 0)
+
+        resolve('message published');
     });
-    resolve('message published');
+
 }
 
 module.exports = {
