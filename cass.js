@@ -34,7 +34,7 @@ function put_in_cass(data) {
                 }
                 resolve(result);
             });
-        }, 0)
+        })
     })
 }
 
