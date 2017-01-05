@@ -6,18 +6,20 @@ const query = 'INSERT INTO textmessages (id,userid,address,msgbody,msgdate,msgid
 function put_in_cass(data) {
 
     return new Promise(function(resolve, reject) {
-        var obj = JSON.parse(data.join('')).messages;
+        //var obj = JSON.parse(data.join('')).messages;
 
-        for (var i = 0; i < obj.length; i++) { //loop to be improved later
+        // for (var i = 0; i < obj.length; i++) { //loop to be improved later
 
-            var params = [cassandra.types.Uuid.random(), '1234', obj[i].address, obj[i].body, obj[i].date, obj[i]._id, obj[i].type]
-            client.execute(query, params, { prepare: true }, function(err, result) {
-                if (err)
-                    reject(err);
-                else
-                    resolve(result);
-            });
-        }
+        //     var params = [cassandra.types.Uuid.random(), '1234', obj[i].address, obj[i].body, obj[i].date, obj[i]._id, obj[i].type]
+        //     client.execute(query, params, { prepare: true }, function(err, result) {
+        //         if (err)
+        //             reject(err);
+        //         else
+        //             resolve(result);
+        //     });
+        // }
+        resolve('result');
+
     })
 
 }
