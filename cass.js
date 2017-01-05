@@ -1,4 +1,5 @@
 var cassandra = require('cassandra-driver');
+const distance = cassandra.types.distance;
 var Promise = require('bluebird');
 var client = new cassandra.Client({
     contactPoints: ['172.24.1.64', '172.24.1.187'],
