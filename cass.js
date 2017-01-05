@@ -6,8 +6,7 @@ const query = 'INSERT INTO textmessages (id,userid,address,msgbody,msgdate,msgid
 function put_in_cass(data) {
 
     return new Promise(function(resolve, reject) {
-        var obj = JSON.parse(data.join(''));
-        console.log(JSON.stringify(obj));
+        var obj = JSON.parse(data.join('')).messages;
         for (var i = 0; i < data.length; i++) { //loop to be improved later
 
             var params = [cassandra.types.Uuid.random(), '1234', data[i].address, data[i].body, data[i].date, data[i]._id, data[i].type]
