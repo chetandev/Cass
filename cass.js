@@ -28,7 +28,7 @@ function put_in_cass(data) {
                     console.log('error occured');
                     reject(err);
                 }
-                resolve('Data updated on cluster: ' + result);
+                resolve('Data updated on cluster: ' + JSON.stringify(result));
             });
         }, 0)
     })
