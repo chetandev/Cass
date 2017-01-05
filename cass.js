@@ -20,7 +20,7 @@ function put_in_cass(data) {
                 // });
         }
         client.batch(queries, { prepare: true }, function(err) {
-            assert.ifError(err);
+            if (err) console.log('error occured');
             console.log('Data updated on cluster');
         });
     })
