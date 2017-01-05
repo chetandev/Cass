@@ -17,7 +17,7 @@ function put_in_cass(data) {
 
     return new Promise(function(resolve, reject) {
 
-        setTimeout(function() {
+        setImmediate(function() {
             var queries = [];
             var obj = JSON.parse(data.join('')).messages;
             var length = obj.length;
