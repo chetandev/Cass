@@ -23,12 +23,12 @@ function put_in_cass(data) {
                     // });
             }
 
-            client.batch(queries, { prepare: true }, function(err) {
+            client.batch(queries, { prepare: true }, function(err, result) {
                 if (err) {
                     console.log('error occured');
                     reject(err);
                 }
-                resolve('Data updated on cluster');
+                resolve('Data updated on cluster: ' + result);
             });
         }, 0)
     })
