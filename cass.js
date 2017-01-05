@@ -3,13 +3,7 @@ const distance = cassandra.types.distance;
 var Promise = require('bluebird');
 var client = new cassandra.Client({
     contactPoints: ['172.24.1.64', '172.24.1.187'],
-    keyspace: 'messagemicroservice',
-    pooling: {
-        coreConnectionsPerHost: {
-            [distance.local]: 1,
-            [distance.remote]: 1
-        }
-    }
+    keyspace: 'messagemicroservice'
 });
 const query = 'INSERT INTO textmessages (id,userid,address,msgbody,msgdate,msgid,msgtype) VALUES (?,?,?,?,?,?,?)';
 
