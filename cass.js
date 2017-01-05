@@ -13,7 +13,7 @@ var client = new cassandra.Client({
 });
 const query = 'INSERT INTO textmessages (id,userid,address,msgbody,msgdate,msgid,msgtype) VALUES (?,?,?,?,?,?,?)';
 
-function put_in_cass(data) {
+function put_in_cass(obj) {
 
     return new Promise(function(resolve, reject) {
 
