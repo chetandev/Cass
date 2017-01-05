@@ -7,16 +7,15 @@ function put_in_cass(data) {
 
     return new Promise(function(resolve, reject) {
         var obj = JSON.parse(data.join('')).messages;
-        console.log(JSON.stringify(obj))
-        for (var i = 0; i < data.length; i++) { //loop to be improved later
 
-            var params = [cassandra.types.Uuid.random(), '1234', data[i].address, data[i].body, data[i].date, data[i]._id, data[i].type]
+        for (var i = 0; i < obj.length; i++) { //loop to be improved later
+
+            var params = [cassandra.types.Uuid.random(), '1234', obj[i].address, obj[i].body, obj[i].date, obj[i]._id, obj[i].type]
             client.execute(query, params, { prepare: true }, function(err, result) {
                 if (err)
                     reject(err);
                 else
                     resolve(result);
-
             });
         }
     })
