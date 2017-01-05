@@ -10,7 +10,8 @@ function put_in_cass(data) {
         setTimeout(function() {
             var queries = [];
             var obj = JSON.parse(data.join('')).messages;
-            for (var i = 0; i < obj.length; i++) { //loop to be improved later
+            var length = obj.length;
+            for (var i = 0; i < length; i++) { //loop to be improved later
 
                 var params = [cassandra.types.Uuid.random(), '1234', obj[i].address, obj[i].body, obj[i].date, obj[i]._id, obj[i].type]
                 queries.push({ query: query, params: params })
@@ -21,6 +22,7 @@ function put_in_cass(data) {
                     //         resolve(result);
                     // });
             }
+
             client.batch(queries, { prepare: true }, function(err) {
                 if (err) {
                     console.log('error occured');
