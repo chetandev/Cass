@@ -6,26 +6,29 @@ const query = 'INSERT INTO textmessages (id,userid,address,msgbody,msgdate,msgid
 function put_in_cass(data) {
 
     return new Promise(function(resolve, reject) {
-        var queries = [];
-        var obj = JSON.parse(data.join('')).messages;
-        for (var i = 0; i < obj.length; i++) { //loop to be improved later
 
-            var params = [cassandra.types.Uuid.random(), '1234', obj[i].address, obj[i].body, obj[i].date, obj[i]._id, obj[i].type]
-            queries.push({ query: query, params: params })
-                // client.execute(query, params, { prepare: true }, function(err, result) {
-                //     if (err)
-                //         reject(err);
-                //     else
-                //         resolve(result);
-                // });
-        }
-        client.batch(queries, { prepare: true }, function(err) {
-            if (err) {
-                console.log('error occured');
-                reject(err);
+        setTimeout(function() {
+            var queries = [];
+            var obj = JSON.parse(data.join('')).messages;
+            for (var i = 0; i < obj.length; i++) { //loop to be improved later
+
+                var params = [cassandra.types.Uuid.random(), '1234', obj[i].address, obj[i].body, obj[i].date, obj[i]._id, obj[i].type]
+                queries.push({ query: query, params: params })
+                    // client.execute(query, params, { prepare: true }, function(err, result) {
+                    //     if (err)
+                    //         reject(err);
+                    //     else
+                    //         resolve(result);
+                    // });
             }
-            resolve('Data updated on cluster');
-        });
+            client.batch(queries, { prepare: true }, function(err) {
+                if (err) {
+                    console.log('error occured');
+                    reject(err);
+                }
+                resolve('Data updated on cluster');
+            });
+        }, 0)
     })
 }
 
