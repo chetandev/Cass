@@ -19,7 +19,6 @@ function put_in_cass(obj) {
 
         setImmediate(function() {
             var queries = [];
-            var obj = JSON.parse(data.join('')).messages;
             var length = obj.length;
             for (var i = 0; i < length; i++) { //loop to be improved later
 
