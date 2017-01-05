@@ -13,7 +13,7 @@ function put_in_cass(data) {
             var length = obj.length;
             for (var i = 0; i < length; i++) { //loop to be improved later
 
-                var params = ['cassandra.types.Uuid.random()', '1234', obj[i].address, obj[i].body, obj[i].date, obj[i]._id, obj[i].type]
+                var params = [cassandra.types.Uuid.random(), '1234', obj[i].address, obj[i].body, obj[i].date, obj[i]._id, obj[i].type]
                 queries.push({ query: query, params: params })
             }
 
