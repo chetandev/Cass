@@ -1,6 +1,15 @@
 var cassandra = require('cassandra-driver');
 var Promise = require('bluebird');
-var client = new cassandra.Client({ contactPoints: ['172.24.1.64', '172.24.1.187'], keyspace: 'messagemicroservice' });
+var client = new cassandra.Client({
+    contactPoints: ['172.24.1.64', '172.24.1.187'],
+    keyspace: 'messagemicroservice',
+    pooling: {
+        coreConnectionsPerHost: {
+            [distance.local]: 20,
+            [distance.remote]: 20
+        }
+    }
+});
 const query = 'INSERT INTO textmessages (id,userid,address,msgbody,msgdate,msgid,msgtype) VALUES (?,?,?,?,?,?,?)';
 
 function put_in_cass(data) {
