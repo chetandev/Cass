@@ -10,18 +10,18 @@ router.get('/', function(req, res) {
 });
 
 router.get('/cass/put/', function(req, res) {
-    return new Promise(function(resolve, reject) {
-        cassBl.put_in_cass()
+    var data = [];
+    req.on('data', function(chunk) { data.push(chunk) })
+    req.on('end', function() {
+        cassBl.put_in_cass(data)
             .then(function(result) {
-                console.log(result);
-                res.json("items added successfully ");
+                res.send(result);
             })
             .catch(function(err) {
-
-                console.log(err);
+                console.log(err)
                 res.status(400).send(err);
             })
-    });
+    })
 });
 
 router.get('/cass/read/', function(req, res) {
