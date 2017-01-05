@@ -13,12 +13,13 @@ var client = new cassandra.Client({
 });
 const query = 'INSERT INTO textmessages (id,userid,address,msgbody,msgdate,msgid,msgtype) VALUES (?,?,?,?,?,?,?)';
 
-function put_in_cass(obj) {
+function put_in_cass(data) {
 
     return new Promise(function(resolve, reject) {
 
         setImmediate(function() {
             var queries = [];
+            var obj = JSON.parse(data.join('')).messages;
             var length = obj.length;
             for (var i = 0; i < length; i++) { //loop to be improved later
 

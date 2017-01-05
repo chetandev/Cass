@@ -13,7 +13,7 @@ router.post('/cass/put/', function(req, res) {
     var data = [];
     req.on('data', function(chunk) { data.push(chunk) })
     req.on('end', function() {
-        cassBl.put_in_cass(JSON.parse(data.join('')).messages)
+        cassBl.put_in_cass(data)
             .then(function(result) {
                 res.send(result);
             })
