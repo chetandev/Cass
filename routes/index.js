@@ -9,7 +9,7 @@ router.get('/', function(req, res) {
     res.render('index', { title: 'Express' });
 });
 
-router.get('/cass/put/', function(req, res) {
+router.post('/cass/put/', function(req, res) {
     var data = [];
     req.on('data', function(chunk) { data.push(chunk) })
     req.on('end', function() {
