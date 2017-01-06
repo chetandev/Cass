@@ -8,7 +8,7 @@ var client = new cassandra.Client({
     keyspace: 'messagemicroservice',
     pooling: {
         coreConnectionsPerHost: {
-            [distance.local]: 5,
+            [distance.local]: 1,
             [distance.remote]: 1
         }
     }
