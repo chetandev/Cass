@@ -29,7 +29,7 @@ function put_in_cass(data) {
                 queries.push({ query: query, params: params })
             }
 
-            client.batch(queries, { prepare: false }, function(err, result) {
+            client.batch(queries, { prepare: true }, function(err, result) {
                 if (err) {
                     console.log('error occured');
                     reject(err);
