@@ -35,7 +35,7 @@ function put_in_cass(data) {
                     callback();
                 });
             },
-            function() {
+            function(err) {
                 client.batch(queries, { prepare: true }, function(err, result) {
                     if (err) {
                         console.log('error occured');
