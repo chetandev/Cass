@@ -46,10 +46,10 @@ function put_in_cass(data) {
             Promise.each(obj, function(item) {
                     var params = [cassandra.types.Uuid.random(), '1234', item.address, item.body, item.date, item._id, item.type]
                     queries.push({ query: query, params: params })
-                    return queries;
+                        //return queries;
                 })
-                .then(function(x) {
-                    client.batch(x, { prepare: true }, function(err, result) {
+                .then(function() {
+                    client.batch(queries, { prepare: true }, function(err, result) {
                         if (err) {
                             console.log('error occured');
                             reject(err);
