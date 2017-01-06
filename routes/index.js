@@ -25,16 +25,14 @@ router.post('/cass/put/', function(req, res) {
 });
 
 router.get('/cass/count', function(req, res) {
-
     cassBl.get_total_count()
         .then(function(result) {
-            res.send(result);
+            res.json(result);
         })
         .catch(function(err) {
             console.log(err)
             res.status(400).send(err);
         })
-
 });
 
 router.get('/cass/read/', function(req, res) {
