@@ -48,8 +48,8 @@ function put_in_cass(data) {
                     queries.push({ query: query, params: params })
                     return queries;
                 })
-                .then(function(queries) {
-                    client.batch(queries, { prepare: true }, function(err, result) {
+                .then(function(x) {
+                    client.batch(x, { prepare: true }, function(err, result) {
                         if (err) {
                             console.log('error occured');
                             reject(err);
