@@ -32,7 +32,7 @@ function put_in_cass(data) {
                 async.each(obj, function(item, callback) {
                     var params = [cassandra.types.Uuid.random(), '1234', item.address, item.body, item.date, item._id, item.type]
                     queries.push({ query: query, params: params })
-                    callback(queries);
+                    callback();
                 });
             },
             function() {
