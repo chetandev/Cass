@@ -94,7 +94,6 @@ function get_total_count() {
         client.stream('SELECT * from textmessages')
             .on('readable', function() {
                 // 'readable' is emitted as soon a row is received and parsed
-                var
                 while (row = this.read()) {
                     count++;
                 }
