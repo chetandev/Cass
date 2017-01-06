@@ -29,19 +29,35 @@ function put_in_cass(data) {
             //     queries.push({ query: query, params: params })
             // }
 
-            async.each(obj, function(item, callback) {
-                var params = [cassandra.types.Uuid.random(), '1234', item.address, item.body, item.date, item._id, item.type]
-                queries.push({ query: query, params: params })
-                callback();
-            }, function(err) {
-                client.batch(queries, { prepare: true }, function(err, result) {
-                    if (err) {
-                        console.log('error occured');
-                        reject(err);
-                    }
-                    resolve(result);
+            // async.each(obj, function(item, callback) {
+            //     var params = [cassandra.types.Uuid.random(), '1234', item.address, item.body, item.date, item._id, item.type]
+            //     queries.push({ query: query, params: params })
+            //     callback();
+            // }, function(err) {
+            //     client.batch(queries, { prepare: true }, function(err, result) {
+            //         if (err) {
+            //             console.log('error occured');
+            //             reject(err);
+            //         }
+            //         resolve(result);
+            //     });
+            // });
+
+            Promise.each(obj, function(item) {
+                    var params = [cassandra.types.Uuid.random(), '1234', item.address, item.body, item.date, item._id, item.type]
+                    queries.push({ query: query, params: params })
+                    return queries;
+                })
+                .then(function(queries) {
+                    client.batch(queries, { prepare: true }, function(err, result) {
+                        if (err) {
+                            console.log('error occured');
+                            reject(err);
+                        }
+                        resolve(result);
+                    });
                 });
-            });
+
         });
     })
 }
