@@ -88,7 +88,28 @@ function get_from_cass() {
     })
 }
 
+function get_total_count() {
+    var count = 0;
+    return new Promise(function(resolve, reject) {
+        client.stream('SELECT * from textmessages')
+            .on('readable', function() {
+                // 'readable' is emitted as soon a row is received and parsed
+                var
+                while (row = this.read()) {
+                    count++;
+                }
+            })
+            .on('end', function() {
+                resolve(count);
+            })
+            .on('error', function(err) {
+                reject(err);
+            });
+    })
+}
+
 module.exports = {
     put_in_cass: put_in_cass,
-    get_from_cass: get_from_cass
+    get_from_cass: get_from_cass,
+    get_total_count: get_total_count
 }
