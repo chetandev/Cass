@@ -1,6 +1,8 @@
 var cassandra = require('cassandra-driver');
 const distance = cassandra.types.distance;
 var Promise = require('bluebird');
+var async = require('async');
+
 var client = new cassandra.Client({
     contactPoints: ['172.24.1.64', '172.24.1.187'],
     keyspace: 'messagemicroservice',
@@ -18,23 +20,33 @@ function put_in_cass(data) {
     return new Promise(function(resolve, reject) {
 
         setImmediate(function() {
-            var queries = [];
-            var obj = JSON.parse(data.join('')).messages;
-            var length = obj.length;
-            for (var i = 0; i < length; i++) { //loop to be improved later
+                var queries = [];
+                var obj = JSON.parse(data.join('')).messages;
+                //var length = obj.length;
+                // for (var i = 0; i < length; i++) { //loop to be improved later
 
-                var params = [cassandra.types.Uuid.random(), '1234', obj[i].address, obj[i].body, obj[i].date, obj[i]._id, obj[i].type]
-                queries.push({ query: query, params: params })
+                //     var params = [cassandra.types.Uuid.random(), '1234', obj[i].address, obj[i].body, obj[i].date, obj[i]._id, obj[i].type]
+                //     queries.push({ query: query, params: params })
+                // }
+
+                async.each(obj, function(item, callback) {
+                    var params = [cassandra.types.Uuid.random(), '1234', item.address, item.body, item.date, item._id, item.type]
+                    queries.push({ query: query, params: params })
+                    callback(queries);
+                });
+            },
+            function() {
+                client.batch(queries, { prepare: true }, function(err, result) {
+                    if (err) {
+                        console.log('error occured');
+                        reject(err);
+                    }
+                    resolve(result);
+                });
             }
+        );
 
-            client.batch(queries, { prepare: true }, function(err, result) {
-                if (err) {
-                    console.log('error occured');
-                    reject(err);
-                }
-                resolve(result);
-            });
-        })
+
     })
 }
 
