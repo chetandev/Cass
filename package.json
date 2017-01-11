@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "ajv": "^4.10.4",
     "amqplib": "^0.5.1",
     "async": "^2.1.4",
     "async-json": "0.0.2",
@@ -17,6 +18,8 @@
     "debug": "~2.2.0",
     "ejs": "~2.5.2",
     "express": "^4.14.0",
+    "isvalid": "^1.4.6",
+    "json-validation": "^1.0.4",
     "kafka-node": "^1.0.7",
     "morgan": "~1.7.0",
     "node-serialize": "0.0.4",

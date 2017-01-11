@@ -3,7 +3,7 @@ var router = express.Router();
 var Promise = require('bluebird');
 var cassBl = require(__base + '/cass.js');
 var kafkaBl = require(__base + '/KafkaProducer.js');
-var rabbitBl = require(__base + '/RabbitProducer.js');
+//var rabbitBl = require(__base + '/RabbitProducer.js');
 /* GET home page. */
 router.get('/', function(req, res) {
     res.render('index', { title: 'Express' });
@@ -13,6 +13,7 @@ router.post('/cass/put/', function(req, res) {
     var data = [];
     req.on('data', function(chunk) { data.push(chunk) })
     req.on('end', function() {
+        console
         cassBl.put_in_cass(data)
             .then(function(result) {
                 res.send(result);

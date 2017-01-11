@@ -2,17 +2,18 @@ var cassandra = require('cassandra-driver');
 const distance = cassandra.types.distance;
 var Promise = require('bluebird');
 var async = require('async');
+var validation = require(__base + '/BL/validations.js')
 
-var client = new cassandra.Client({
-    contactPoints: ['172.24.1.64', '172.24.1.187'],
-    keyspace: 'messagemicroservice',
-    pooling: {
-        coreConnectionsPerHost: {
-            [distance.local]: 1,
-            [distance.remote]: 1
-        }
-    }
-});
+// var client = new cassandra.Client({
+//     contactPoints: ['172.24.1.64', '172.24.1.187'],
+//     keyspace: 'messagemicroservice',
+//     pooling: {
+//         coreConnectionsPerHost: {
+//             [distance.local]: 1,
+//             [distance.remote]: 1
+//         }
+//     }
+// });
 const query = 'INSERT INTO textmessages (id,userid,address,msgbody,msgdate,msgid,msgtype) VALUES (?,?,?,?,?,?,?)';
 
 function put_in_cass(data) {
@@ -23,19 +24,36 @@ function put_in_cass(data) {
             var queries = [];
             var obj = JSON.parse(data.join('')).messages;
             var length = obj.length;
+            var errData = [];
+            var validData = [];
             for (var i = 0; i < length; i++) { //loop to be improved later
+
+
+                validation.customValidation(obj[i])
+                    .then(function(validData) {
+
+
+                        resolve(validData)
+                    }).catch(function(err) {
+                        reject(err)
+                    })
+
+
+                //validation checks 
+                //error code generation 
+
 
                 var params = [cassandra.types.Uuid.random(), '1234', obj[i].address, obj[i].body, obj[i].date, obj[i]._id, obj[i].type]
                 queries.push({ query: query, params: params })
             }
 
-            client.batch(queries, { prepare: true }, function(err, result) {
-                if (err) {
-                    console.log('error occured');
-                    reject(err);
-                }
-                resolve(result);
-            });
+            // client.batch(queries, { prepare: true }, function(err, result) {
+            //     if (err) {
+            //         console.log('error occured');
+            //         reject(err);
+            //     }
+            //     resolve(result);
+            // });
 
             // async.each(obj, function(item, callback) {
             //     var params = [cassandra.types.Uuid.random(), '1234', item.address, item.body, item.date, item._id, item.type]
@@ -65,7 +83,7 @@ function put_in_cass(data) {
             //             resolve(result);
             //         });
             //     });
-
+            //resolve('success')
         });
     })
 }
