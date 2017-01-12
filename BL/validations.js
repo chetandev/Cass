@@ -1,6 +1,7 @@
 var isvalid = require('isvalid');
 var Promise = require('bluebird');
 
+
 function obj() {
     this.isvalidJson = function(inputData) {
         return new Promise(function(resolve, reject) {
@@ -138,18 +139,42 @@ function obj() {
 
     }
 
-
+    //this is used to validate headers 
     this.validateHeaders = function(req, res, next) {
 
-        // if (req.headers["X-Device-Key"]) {
-        //     next();
-        // } else {
-        //     res.status(400).send({ "errors": ["Device Key Header Missing"] })
-        // }
+            if (req.headers['x-device-key']) {
+                next();
+            } else {
+                res.status(400).send({ "errors": ["Device Key Header Missing"] })
+            }
 
+        }
+        //function to validate data
+        //input array of message objects 
+        //output array of error messages
+    this.bodyValidation = function(obj) {
+        return new Promise(function(resolve, reject) {
+            var _inValiddata = [];
+            var _validData = [];
+            var _partialUpdate = false;
+            Promise.each(obj, function(item) {
+                validations(item)
+                    .then(function(validData) {
+                        _validData.push(validData);
+                    }).catch(function(err) {
+                        _partialUpdate = true;
+                        _inValiddata.push(err)
+                    })
+            }).then(function() {
+                resolve({ "valid": _validData, "inValid": _inValiddata, "partial": _partialUpdate })
+            })
+        });
     }
 
-    this.bodyValidation = function(data) {
+
+
+    //this is the internal function to check errors in body object 
+    var validations = function(data) {
         return new Promise(function(resolve, reject) {
 
             if (!data.hasOwnProperty("dvcMsgId") || !data.dvcMsgId) {
@@ -159,7 +184,6 @@ function obj() {
                     "error": "dvcMsgId not provided"
                 })
             }
-
 
             if (!data.hasOwnProperty("phoneNo") || !data.phoneNo) {
                 reject({

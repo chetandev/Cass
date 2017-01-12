@@ -4,7 +4,6 @@ var Promise = require('bluebird');
 var cassBl = require(__base + '/cass.js');
 var kafkaBl = require(__base + '/KafkaProducer.js');
 var validationBl = require(__base + '/BL/validations.js');
-
 //var rabbitBl = require(__base + '/RabbitProducer.js');
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -14,35 +13,33 @@ router.get('/', function(req, res) {
 router.post('/cass/put/',
     validationBl.validateHeaders,
     function(req, res) {
-        conosle.log("kjhbgj" + req.headers)
         var data = [];
         req.on('data', function(chunk) { data.push(chunk) })
         req.on('end', function() {
-
-
-
-            // cassBl.put_in_cass(data)
-            //     .then(function(result) {
-            //         if (result.status == 1) {
-            //             console.log('j1')
-            //             res.status(200).send(result);
-
-            //         }
-            //         if (result.status == 2) {
-            //             console.log('jj')
-            //             res.status(202).send(result);
-            //         }
-            //     })
-            //     .catch(function(err) {
-            //         if (err.status == 500) {
-            //             err.status = 0;
-            //             res.status(500).send(err);
-            //         }
-            //         if (err.status == 400) {
-            //             err.status = 0;
-            //             res.status(400).send(err);
-            //         }
-            //     })
+            var obj = JSON.parse(data.join('')).messages;
+            validationBl.bodyValidation(obj)
+                .then(function(data) {
+                    cassBl.put_in_cass(data.valid)
+                        .then(function(result) {
+                            if (data.partial) {
+                                var obj = { "status": 2, "errors": result.errors, "success": result.messages, "failed": data.inValid }
+                                res.status(202).send(obj);
+                            } else {
+                                var obj = { "status": 1, "errors": result.errors, "success": result.messages, "failed": data.inValid }
+                                res.status(200).send(obj);
+                            }
+                        })
+                        .catch(function(err) {
+                            if (err.status == 500) {
+                                var obj = { "status": 0, "errors": err.errors, "success": err.messages, "failed": data.inValid }
+                                res.status(500).send(obj);
+                            }
+                            if (err.status == 400) {
+                                var obj = { "status": 0, "errors": err.errors, "success": err.messages, "failed": data.inValid }
+                                res.status(400).send(obj);
+                            }
+                        })
+                })
         })
     });
 

@@ -1,8 +1,8 @@
 var cassandra = require('cassandra-driver');
 const distance = cassandra.types.distance;
 var Promise = require('bluebird');
-var async = require('async');
-var validation = require(__base + '/BL/validations.js')
+
+
 
 var client = new cassandra.Client({
     contactPoints: ['localhost'],
@@ -16,48 +16,32 @@ var client = new cassandra.Client({
 });
 const query = 'INSERT INTO textmessages (id,userid,address,msgbody,msgdate,msgid,msgtype) VALUES (?,?,?,?,?,?,?)';
 
-function put_in_cass(data) {
+function put_in_cass(obj) {
 
     return new Promise(function(resolve, reject) {
-
-        setImmediate(function() {
-            var _queries = [];
-            var _responseCodes = [];
-            var obj = JSON.parse(data.join('')).messages;
-            var length = obj.length;
-            var partialUpdate = false;
-
-
-
-
-            Promise.each(obj, function(item) {
-                    validation.customValidation(item)
-                        .then(function(validData) {
-                            var uuid = cassandra.types.Uuid.random();
-                            var params = [uuid, '1234', validData.name, validData.msg, validData.dateTime, validData.dvcMsgId, validData.msgType]
-                            _queries.push({ query: query, params: params })
-                            _responseCodes.push({
-                                "dvcMsgId": validData.dvcMsgId,
-                                "serMsgId": uuid
-                            })
-                        }).catch(function(err) {
-                            partialUpdate = true;
-                            _responseCodes.push(err)
-                        })
+        var _queries = [];
+        var _responseCodes = [];
+        Promise.each(obj, function(validData) {
+                var uuid = cassandra.types.Uuid.random();
+                var params = [uuid, '1234', validData.name, validData.msg, validData.dateTime, validData.dvcMsgId, validData.msgType]
+                _queries.push({ query: query, params: params })
+                _responseCodes.push({
+                    "dvcMsgId": validData.dvcMsgId,
+                    "serMsgId": uuid
                 })
-                .then(function() {
-                    client.batch(_queries, { prepare: true }, function(err, result) {
-                        if (err) {
-                            reject({ "errors": [err.message], "status": 500, "messages": _responseCodes }); //internal server error 500
-                        } else {
-                            var status = partialUpdate > 0 ? 2 : 1;
-                            resolve({ "errors": [], "status": status, "messages": _responseCodes }); //
-                        }
-                    });
-                }).catch(function(err) {
-                    reject({ "errors": [err.message], "status": 400, "messages": _responseCodes }); //bad request 400
-                })
-        });
+            })
+            .then(function(result) {
+                client.batch(_queries, { prepare: true }, function(err, result) {
+                    if (err) {
+                        reject({ "errors": ["error while pushing in cassandra"], "status": 500, "messages": _responseCodes }); //internal server error 500
+                    } else {
+
+                        resolve({ "errors": [], "messages": _responseCodes });
+                    }
+                });
+            }).catch(function(err) {
+                reject({ "errors": [err.message], "status": 400, "messages": _responseCodes }); //bad request 400
+            })
     })
 }
 
