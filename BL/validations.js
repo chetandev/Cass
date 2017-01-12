@@ -138,8 +138,20 @@ function obj() {
 
     }
 
-    this.customValidation = function(data) {
+
+    this.validateHeaders = function(req, res, next) {
+
+        // if (req.headers["X-Device-Key"]) {
+        //     next();
+        // } else {
+        //     res.status(400).send({ "errors": ["Device Key Header Missing"] })
+        // }
+
+    }
+
+    this.bodyValidation = function(data) {
         return new Promise(function(resolve, reject) {
+
             if (!data.hasOwnProperty("dvcMsgId") || !data.dvcMsgId) {
                 reject({
                     "dvcMsgId": "0",
@@ -224,7 +236,6 @@ function obj() {
             resolve(data);
         })
     }
-
 }
 
 module.exports = new obj();
