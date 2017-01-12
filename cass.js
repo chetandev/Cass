@@ -25,6 +25,8 @@ function put_in_cass(data) {
             var _responseCodes = [];
             var obj = JSON.parse(data.join('')).messages;
             var length = obj.length;
+            var partialUpdate = false;
+
 
 
 
@@ -39,19 +41,21 @@ function put_in_cass(data) {
                                 "serMsgId": uuid
                             })
                         }).catch(function(err) {
+                            partialUpdate = true;
                             _responseCodes.push(err)
                         })
                 })
                 .then(function() {
                     client.batch(_queries, { prepare: true }, function(err, result) {
                         if (err) {
-                            reject({ "errors": err.message, "status": 0, "messages": _responseCodes });
+                            reject({ "errors": [err.message], "status": 500, "messages": _responseCodes }); //internal server error 500
+                        } else {
+                            var status = partialUpdate > 0 ? 2 : 1;
+                            resolve({ "errors": [], "status": status, "messages": _responseCodes }); //
                         }
-                        resolve({ "errors": "", "status": 1, "messages": _responseCodes });
                     });
                 }).catch(function(err) {
-
-                    reject({ "errors": err.message, "status": 0, "messages": _responseCodes });
+                    reject({ "errors": [err.message], "status": 400, "messages": _responseCodes }); //bad request 400
                 })
         });
     })

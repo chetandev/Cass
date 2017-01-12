@@ -13,14 +13,28 @@ router.post('/cass/put/', function(req, res) {
     var data = [];
     req.on('data', function(chunk) { data.push(chunk) })
     req.on('end', function() {
-        console
+
         cassBl.put_in_cass(data)
             .then(function(result) {
-                res.send(result);
+                if (result.status == 1) {
+                    console.log('j1')
+                    res.status(200).send(result);
+
+                }
+                if (result.status == 2) {
+                    console.log('jj')
+                    res.status(202).send(result);
+                }
             })
             .catch(function(err) {
-                console.log(err)
-                res.status(400).send(err);
+                if (err.status == 500) {
+                    err.status = 0;
+                    res.status(500).send(err);
+                }
+                if (err.status == 400) {
+                    err.status = 0;
+                    res.status(400).send(err);
+                }
             })
     })
 });
@@ -29,10 +43,12 @@ router.get('/cass/count', function(req, res) {
     cassBl.get_total_count()
         .then(function(result) {
             res.json(result);
+
         })
         .catch(function(err) {
-            console.log(err)
+
             res.status(400).send(err);
+
         })
 });
 
