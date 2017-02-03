@@ -37,14 +37,14 @@ producer.on('error', function(err) {
 function send_to_kafka(data) {
 
     return new Promise(function(resolve, reject) {
-        console.log('data: ' + JSON.stringify(data))
-
+        // console.log('data: ' + JSON.stringify(data))
+        resolve(data);
         payloads = [
             { topic: 'textmessages', messages: JSON.stringify(data) }
         ];
         producer.send(payloads, function(err, data) {
-            console.log(data);
-            resolve(data);
+            // console.log(data);
+            
         });
 
     })
